@@ -1,3 +1,4 @@
+import MovieDataProvider from 'layers/MovieDataProvider';
 import * as React from 'react';
 import {
   BrowserRouter as Router,
@@ -20,15 +21,17 @@ import MovieDetail from './pages/MovieDetail';
 function App() {
   return (
     <div className="App">
-      <Router>
-        <NavigationBar />
-        <div className="container is-max-widescreen">
-          <Switch>
-            <Route exact path="/movies/:movieId" component={MovieDetail} />
-            <Route exact path="/" component={Home} />
-          </Switch>
-        </div>
-      </Router>
+      <MovieDataProvider>
+        <Router>
+          <NavigationBar />
+          <div className="container is-max-widescreen">
+            <Switch>
+              <Route exact path="/movies/:movieId" component={MovieDetail} />
+              <Route exact path="/" component={Home} />
+            </Switch>
+          </div>
+        </Router>
+      </MovieDataProvider>
     </div>
   );
 }
