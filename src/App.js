@@ -22,10 +22,12 @@ function App() {
     <div className="App">
       <Router>
         <NavigationBar />
-        <Switch>
-          <Route exact path="/movies/:movieId" component={MovieDetail} />
-          <Route exact path="/" component={Home} />
-        </Switch>
+        <div className="container is-max-widescreen">
+          <Switch>
+            <Route exact path="/movies/:movieId" component={MovieDetail} />
+            <Route exact path="/" component={Home} />
+          </Switch>
+        </div>
       </Router>
     </div>
   );
