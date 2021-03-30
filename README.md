@@ -4,7 +4,7 @@ Halo, tim HR. Kali ini gw akan buatkan kalian web untuk menampilkan list film,
 seperti yang biasa kita minta kandidat untuk buat. Repo ini akan berguna untuk
 kita belajar nanti.
 
-# Cara menjalankan
+## Cara menjalankan
 
 Untuk menjalankan aplikasi ini:
 
@@ -14,18 +14,18 @@ caranya. Nanti saya pandu
 2. Clone repository ini. Clone itu bisa kalian anggap seperti download.
 3. Buka folder project ini, lalu jalankan command ini:
 
-```
-yarn install
-```
+   ```
+   yarn install
+   ```
 
-Command ini bertujuan untuk menginstall seluruh modul yang diperlukan untuk
-menjalankan aplikasi yang ada di folder ini
+   Command ini bertujuan untuk menginstall seluruh modul yang diperlukan untuk
+   menjalankan aplikasi yang ada di folder ini
 
 4. Terakhir jalankan command ini untuk memulai:
 
-```
-yarn start
-```
+   ```
+   yarn start
+   ```
 
-Fungsi command ini untuk menjalankan suatu web server yang akan melakukan hosting
-aplikasi ini
+   Fungsi command ini untuk menjalankan suatu web server yang akan melakukan hosting
+   aplikasi ini
