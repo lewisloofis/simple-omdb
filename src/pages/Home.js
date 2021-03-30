@@ -1,10 +1,30 @@
 import * as React from 'react';
 import MovieCard from '../components/MovieCard';
-import { useMovieListData } from '../layers/MovieDataProvider';
+import InfiniteScroll from '../components/InfiniteScroll';
+import { useMovieListData } from '../layers/providers/MovieDataProvider';
 
 const Home = () => {
-  const { movies } = useMovieListData();
+  const {
+    movies,
+    hasMoreMovies,
+    errorMessage,
+    loadMoreMovies,
+  } = useMovieListData();
 
+  const handleLoadMore = async () => {
+    loadMoreMovies();
+  };
+
+  // Show error message if any
+  if (!!errorMessage) {
+    return (
+      <div>
+        {errorMessage}
+      </div>
+    );
+  }
+
+  // Show welcome text if movies are not searched yet
   if (Array.isArray(movies) && movies.length === 0) {
     return (
       <div>
@@ -13,9 +33,16 @@ const Home = () => {
     );
   };
 
+  // Show search movie result if there is any
   return (
     <div>
-      {movies.map(movie => <MovieCard key={movie.imdbID} movie={movie} />)}
+      {/* Movie list */}
+      <InfiniteScroll
+        hasMore={hasMoreMovies}
+        onLoadMore={handleLoadMore}
+      >
+        {movies.map(movie => <MovieCard key={movie.imdbID} movie={movie} />)}
+      </InfiniteScroll>
     </div>
   );
 };

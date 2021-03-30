@@ -2,19 +2,12 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * @typedef {Object} Movie
- * @property {string} Title Movie title
- * @property {string} Year Year the movie is released
- * @property {string} Poster Movie poster URL
- */
-
-/**
  * Movie card element
  *
  * This component will show movies important data to users.
  * Shown in group on home page as a list.
  * @param {Object} props React props 
- * @param {Movie} props.movie Movie data
+ * @param {import('layers/api').Movie} props.movie Movie data
  */
 const MovieCard = ({ movie }) => {
   return (

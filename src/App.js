@@ -1,4 +1,5 @@
-import MovieDataProvider from 'layers/MovieDataProvider';
+import MovieDataProvider from 'layers/providers/MovieDataProvider';
+import NavigationBarContextProvider from 'layers/providers/NavigationBarContextProvider';
 import * as React from 'react';
 import {
   BrowserRouter as Router,
@@ -21,17 +22,19 @@ import MovieDetail from './pages/MovieDetail';
 function App() {
   return (
     <div className="App">
-      <MovieDataProvider>
-        <Router>
-          <NavigationBar />
-          <div className="container is-max-widescreen">
-            <Switch>
-              <Route exact path="/movies/:movieId" component={MovieDetail} />
-              <Route exact path="/" component={Home} />
-            </Switch>
-          </div>
-        </Router>
-      </MovieDataProvider>
+      <NavigationBarContextProvider>
+        <MovieDataProvider>
+          <Router>
+            <NavigationBar />
+            <div>
+              <Switch>
+                <Route exact path="/movies/:movieId" component={MovieDetail} />
+                <Route exact path="/" component={Home} />
+              </Switch>
+            </div>
+          </Router>
+        </MovieDataProvider>
+      </NavigationBarContextProvider>
     </div>
   );
 }

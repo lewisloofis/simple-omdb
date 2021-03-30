@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useMovieDetailData } from 'layers/MovieDataProvider';
+import { useMovieDetailData } from 'layers/providers/MovieDataProvider';
 
 const MovieDetail = () => {
   const { movieId } = useParams();

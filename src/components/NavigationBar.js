@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useMovieListData } from 'layers/MovieDataProvider';
+import { useMovieListData } from 'layers/providers/MovieDataProvider';
+import { useNavigationBarData } from 'layers/providers/NavigationBarContextProvider';
 
 /**
  * Navigation bar
@@ -11,10 +12,15 @@ import { useMovieListData } from 'layers/MovieDataProvider';
  * - Navigation to home page
  */
 const NavigationBar = () => {
-  // We are storing search input value in these variable
-  const [searchedValue, setSearchedValue] = React.useState('');
+  const {
+    searchedValue,
+    setSearchedValue,
+  } = useNavigationBarData();
 
-  const { searchMovies } = useMovieListData();
+  const {
+    resetMovieList,
+    searchMovies,
+  } = useMovieListData();
 
   /**
    * Handle user's typing event when they search movies
@@ -31,7 +37,11 @@ const NavigationBar = () => {
     // Make sure users don't get redirected after form submit
     event.preventDefault();
 
-    await searchMovies(searchedValue);
+    // Reset any last search state
+    resetMovieList();
+
+    // Initiate search movie
+    await searchMovies();
   };
 
   return (
