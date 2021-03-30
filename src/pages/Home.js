@@ -41,7 +41,7 @@ const Home = () => {
         hasMore={hasMoreMovies}
         onLoadMore={handleLoadMore}
       >
-        {movies.map(movie => <MovieCard key={movie.imdbID} movie={movie} />)}
+        {movies.map(movie => <MovieCard key={movie.imdbID + movie.Title} movie={movie} />)}
       </InfiniteScroll>
     </div>
   );

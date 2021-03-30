@@ -22,7 +22,7 @@ const movieDetailDefaultState = {
 const MovieListContext = React.createContext([]);
 const MovieListHasMoreStateContext = React.createContext(false);
 const MovieDetailContext = React.createContext(movieDetailDefaultState);
-const MovieListSearchContext = React.createContext(() => {});
+const MovieListLoadingContext = React.createContext(false);
 const MovieListGetByIdContext = React.createContext(() => {});
 const MovieListLoadMoreContext = React.createContext(() => {});
 const MovieListErrorMessageContext = React.createContext('');
@@ -34,7 +34,7 @@ const MovieListResetContext = React.createContext(() => {});
  * @param {React.ReactChildren} props.children React children
  */
 const MovieDataProvider = ({ children }) => {
-  const { searchedValue } = useNavigationBarData();
+  const { searchedValue, setSearchedValue } = useNavigationBarData();
 
   /**
    * Movies data for home page list are being stored in this state
@@ -70,6 +70,7 @@ const MovieDataProvider = ({ children }) => {
    * Reset movie list state
    */
   const resetMovieListState = () => {
+    setSearchedValue('');
     setErrorMessage('');
     setHasMoreMovies(false);
     setMovies([]);
@@ -77,41 +78,10 @@ const MovieDataProvider = ({ children }) => {
   };
 
   /**
-   * Search movies from OMDB, then save the values to be used appwide.
-   * @param {string} title Movie title
-   */
-  const searchMovies = React.useCallback(async () => {
-    // Prevent multiple request while API is loading
-    if (loading) return;
- 
-    // Mark request as on progress
-    setLoading(true);
-
-    // Always look for the first page, if user trigger search for the first time
-    const moviesAPIResponse = await searchFromOMDB(searchedValue, page);
-
-    // Mark current request done, and save current page state
-    setLoading(false);
-
-    // Save movie response if the response is correct
-    if (moviesAPIResponse.Response === 'True' && Array.isArray(moviesAPIResponse.Search)) {
-      // Signal to our app that this search has more movies that can be loaded
-      setHasMoreMovies(moviesAPIResponse.totalResults > moviesAPIResponse.Search.length);
-
-      // Save movies data
-      if (page > 1) return setMovies([...movies, ...moviesAPIResponse.Search]);
-      return setMovies(moviesAPIResponse.Search);
-    }
-
-    return setErrorMessage(moviesAPIResponse.Error);
-  }, [movies, page, searchedValue, loading]);
-
-  /**
-   * Increment page number state, if load more is triggered. Using debounce to make sure
-   * we call this once
+   * Increment page number state, if load more is triggered.
+   * We use debounce to prevent this triggered multiple times due to visibility listener
    */
   const loadMoreMovies = debounce(() => {
-    console.log('NEXTPAGE', page + 1);
     setPage(page + 1);
   }, 250);
 
@@ -125,12 +95,45 @@ const MovieDataProvider = ({ children }) => {
     return setMovieDetail(movie);
   }, [setMovieDetail]);
 
+  React.useEffect(() => {
+    const searchMovies = async () => {
+      if (!searchedValue) return;
+
+      // Mark request as on progress
+      setLoading(true);
+
+      // Always look for the first page, if user trigger search for the first time
+      const moviesAPIResponse = await searchFromOMDB(searchedValue, page);
+
+      // Mark current request done, and save current page state
+      setLoading(false);
+
+      // Save movie response if the response is correct
+      if (moviesAPIResponse.Response === 'True' && Array.isArray(moviesAPIResponse.Search)) {
+        const newMoviesArray = page > 1 ? [...movies, ...moviesAPIResponse.Search] : [...moviesAPIResponse.Search];
+        // Signal to our app that this search has more movies that can be loaded
+        setHasMoreMovies(newMoviesArray.length < Number(moviesAPIResponse.totalResults));
+
+        // Save movies data
+        return setMovies(newMoviesArray);
+      }
+
+      // Set error message
+      return setErrorMessage(moviesAPIResponse.Error);
+    }
+    searchMovies();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, searchedValue]);
+
+  // We cannot include movies as useEffect dependency due to cyclical dependencies which will cause infinite rerender,
+  // so we disable eslint just for this case.
+
   return (
     <MovieListContext.Provider value={movies}>
       <MovieListHasMoreStateContext.Provider value={hasMoreMovies}>
         <MovieDetailContext.Provider value={movieDetail}>
           <MovieListErrorMessageContext.Provider value={errorMessage}>
-            <MovieListSearchContext.Provider value={searchMovies}>
+            <MovieListLoadingContext.Provider value={loading}>
               <MovieListLoadMoreContext.Provider value={loadMoreMovies}>
                 <MovieListGetByIdContext.Provider value={getMovieById}>
                   <MovieListResetContext.Provider value={resetMovieListState}>
@@ -138,7 +141,7 @@ const MovieDataProvider = ({ children }) => {
                   </MovieListResetContext.Provider>
                 </MovieListGetByIdContext.Provider>
               </MovieListLoadMoreContext.Provider>
-            </MovieListSearchContext.Provider>
+            </MovieListLoadingContext.Provider>
           </MovieListErrorMessageContext.Provider>
         </MovieDetailContext.Provider>
       </MovieListHasMoreStateContext.Provider>
@@ -154,19 +157,18 @@ export const useMovieListData = () => {
   const movies = React.useContext(MovieListContext);
   const hasMoreMovies = React.useContext(MovieListHasMoreStateContext);
   const errorMessage = React.useContext(MovieListErrorMessageContext);
-  const searchMovies = React.useContext(MovieListSearchContext);
+  const loading = React.useContext(MovieListLoadingContext);
   const loadMoreMovies = React.useContext(MovieListLoadMoreContext);
   const resetMovieList = React.useContext(MovieListResetContext);
 
   if (movies === undefined) throw new Error('useMovieListData must be used inside <MovieDataProvider />');
   if (hasMoreMovies === undefined) throw new Error('useMovieListData must be used inside <MovieDataProvider />');
-  if (searchMovies === undefined) throw new Error('useMovieListData must be used inside <MovieDataProvider />');
 
   return {
     movies,
     errorMessage,
     hasMoreMovies,
-    searchMovies,
+    loading,
     loadMoreMovies,
     resetMovieList,
   };

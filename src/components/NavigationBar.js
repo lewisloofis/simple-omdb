@@ -12,14 +12,10 @@ import { useNavigationBarData } from 'layers/providers/NavigationBarContextProvi
  * - Navigation to home page
  */
 const NavigationBar = () => {
-  const {
-    searchedValue,
-    setSearchedValue,
-  } = useNavigationBarData();
-
+  const [typedValue, setTypedValue] = React.useState('');
+  const { setSearchedValue } = useNavigationBarData();
   const {
     resetMovieList,
-    searchMovies,
   } = useMovieListData();
 
   /**
@@ -27,7 +23,7 @@ const NavigationBar = () => {
    */
   const handleTypeToSearch = (event) => {
     const searchedMovieTitle = event.currentTarget.value;
-    setSearchedValue(searchedMovieTitle);
+    setTypedValue(searchedMovieTitle);
   };
 
   /**
@@ -41,7 +37,7 @@ const NavigationBar = () => {
     resetMovieList();
 
     // Initiate search movie
-    await searchMovies();
+    setSearchedValue(typedValue);
   };
 
   return (
@@ -55,7 +51,7 @@ const NavigationBar = () => {
         <input
           type="text"
           placeholder="Search movies"
-          value={searchedValue}
+          value={typedValue}
           onChange={handleTypeToSearch}
         />
         <button type="submit">

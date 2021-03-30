@@ -22,7 +22,8 @@ const InfiniteScroll = ({
   // Attach event listener to the element at the bottom of list to create infinite
   // loading experience
   React.useEffect(() => {
-    if (bottomOfListEl.current) {
+    const bottomOfListElRef = bottomOfListEl.current
+    if (bottomOfListEl && bottomOfListElRef) {
       // Instantiate new visibility observer, this will track if an element is visible
       const observer = new IntersectionObserver((changes) => {
         for (const change of changes) {
@@ -49,6 +50,8 @@ const InfiniteScroll = ({
 
       // Track if the bottom of list element is visible
       observer.observe(bottomOfListEl.current);
+
+      return () => observer.unobserve(bottomOfListElRef);
     }
   }, [bottomOfListEl]);
 
@@ -68,7 +71,7 @@ const InfiniteScroll = ({
       {/* This is invisible HTML element which represent bottom of our list. */}
       {/* We will trigger load more to create Infinite Scrolling experience. */}
       {/* Only rendered if the list has more data, flagged by hasMore props. */}
-      {!!hasMore && <div ref={bottomOfListEl}>It ends here</div>}
+      {!!hasMore && <div ref={bottomOfListEl}>Loading...</div>}
     </div>
   );
 };
