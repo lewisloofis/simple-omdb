@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * @typedef {Object} Movie
@@ -17,11 +18,11 @@ import * as React from 'react';
  */
 const MovieCard = ({ movie }) => {
   return (
-    <div>
+    <Link to={`/movies/${movie.imdbID}`}>
       <img src={movie.Poster} alt={movie.Title} />
       <h3>{movie.Title}</h3>
       <p>{movie.Year}</p>
-    </div>
+    </Link>
   );
 };
 
