@@ -20,8 +20,9 @@ caranya. Nanti saya pandu
 
    Command ini bertujuan untuk menginstall seluruh modul yang diperlukan untuk
    menjalankan aplikasi yang ada di folder ini
+4. Copy file `.env.example`, ubah namanya jadi `.env`
 
-4. Terakhir jalankan command ini untuk memulai:
+5. Terakhir jalankan command ini untuk memulai:
 
    ```
    yarn start
