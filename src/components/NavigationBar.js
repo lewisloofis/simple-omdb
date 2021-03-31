@@ -4,6 +4,8 @@ import composeClass from 'classnames';
 
 import { useMovieListData } from 'layers/providers/MovieDataProvider';
 import { useNavigationBarData } from 'layers/providers/NavigationBarContextProvider';
+import debounce from 'lodash.debounce';
+import { searchFromOMDB } from 'layers/api';
 
 /**
  * Navigation bar
@@ -13,15 +15,52 @@ import { useNavigationBarData } from 'layers/providers/NavigationBarContextProvi
  * - Navigation to home page
  */
 const NavigationBar = () => {
+  const searchInput = React.useRef(null);
+
   // Store typed value
   const [typedValue, setTypedValue] = React.useState('');
 
   // This variable will decide if we need to show menu on mobile
   const [showMenu, setShowMenu] = React.useState(false);
 
+  const [showAutoComplete, setShowAutoComplete] = React.useState(false);
+  const [autocompleteResult, setAutocompleteResult] = React.useState([]);
+
   // We differentiate the value typed by users to implement autocomplete features.
   // Users will need to press enter to confirm search and show result in home page
   const { setSearchedValue } = useNavigationBarData();
+
+  React.useEffect(() => {
+    const searchAutocompleteResult = debounce(async () => {
+      // Always look for the first page, if user triggers autocomplete
+      const moviesAPIResponse = await searchFromOMDB(typedValue, 1);
+      if (moviesAPIResponse.Response === 'True') {
+        setAutocompleteResult(moviesAPIResponse.Search);
+      }
+    }, 250);
+
+    // If users type more than 2 chars, show autocomplete
+    if (typedValue.length > 2) {
+      searchAutocompleteResult()
+    }
+  }, [typedValue]);
+
+  /**
+   * Listen to clicks outside search input, hide autocomplete if there is any click
+   * outside search input
+   */
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchInput.current && !searchInput.current.contains(event.target)) {
+        setShowAutoComplete(false);
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, [searchInput]);
 
   const {
     resetMovieList,
@@ -46,6 +85,9 @@ const NavigationBar = () => {
    * Handle user's command to search movies
    */
   const handleSearchMovie = async (event) => {
+    // Clear autocomplete
+    setShowAutoComplete(false);
+
     // Make sure users don't get redirected after form submit
     event.preventDefault();
 
@@ -55,6 +97,13 @@ const NavigationBar = () => {
     // Initiate search movie
     setSearchedValue(typedValue);
   };
+
+  /**
+   * Show autocomplete if input is in focus
+   */
+  const handleInputFocus = () => {
+    setShowAutoComplete(true);
+  }
 
   return (
     <nav className="navbar level" role="navigation" aria-label="main navigation">
@@ -88,21 +137,34 @@ const NavigationBar = () => {
           {/* Search input, this will be visible only at laptop screen or above, */}
           {/* due to Bulma styling only show `.navbar-menu` on laptop screen (>1024px) */}
           <div className="navbar-item">
-            <form className="field" onSubmit={handleSearchMovie}>
+            {/* Search input block */}
+            <form className="field search-bar" onSubmit={handleSearchMovie}>
               <div className="control has-icons-left">
                 <input
+                  ref={searchInput}
                   type="text"
                   placeholder="Search movies"
                   className="input is-rounded"
                   value={typedValue}
                   onChange={handleTypeToSearch}
+                  onFocus={handleInputFocus}
                 />
                 <span className="icon is-small is-left has-text-dark">
                   <i className="fas fa-search" />
                 </span>
               </div>
+
+              {/* Autocomplete box */}
+              {showAutoComplete && (
+                <div className="box autocomplete mt-2">
+                  {Array.isArray(autocompleteResult) && autocompleteResult.map(result => (
+                    <Link className="has-text-black" to={`/movies/${result.imdbID}`}>{result.Title} ({result.Year})</Link>
+                  ))}
+                </div>
+              )}
             </form>
           </div>
+
         </div>
       </div>
     </nav>

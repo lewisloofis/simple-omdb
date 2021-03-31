@@ -1,3 +1,26 @@
+/* Search bar styling */
+.search-bar {
+  position: relative;
+}
+
+.autocomplete {
+  padding: 0;
+  width: 100%;
+  position: absolute;
+  float: left;
+}
+
+.autocomplete a {
+  display: block;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+}
+
+.autocomplete a:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
 /* Movie card styles */
 .movie-card {
   width: 250px;
