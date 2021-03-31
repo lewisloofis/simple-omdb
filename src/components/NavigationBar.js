@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import composeClass from 'classnames';
 
 import { useMovieListData } from 'layers/providers/MovieDataProvider';
@@ -15,6 +15,9 @@ import { searchFromOMDB } from 'layers/api';
  * - Navigation to home page
  */
 const NavigationBar = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   const searchInput = React.useRef(null);
 
   // Store typed value
@@ -96,6 +99,12 @@ const NavigationBar = () => {
 
     // Initiate search movie
     setSearchedValue(typedValue);
+
+    // Movie list view is only available at homepage.
+    // So redirect users to home page if user is not searching on home page
+    if (location.pathname !== '/') {
+      history.push('/');
+    }
   };
 
   /**
