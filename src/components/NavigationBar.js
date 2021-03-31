@@ -57,7 +57,7 @@ const NavigationBar = () => {
   };
 
   return (
-    <nav className="navbar" role="navigation" aria-label="main navigation">
+    <nav className="navbar level" role="navigation" aria-label="main navigation">
       {/* Site brand location, this block will show our logo */}
       <div className="navbar-brand">
         {/* Site logo */}
@@ -67,7 +67,7 @@ const NavigationBar = () => {
 
         {/* This is toggle button for showing menu on mobile screen */}
         <button
-          className="navbar-burger button is-inverted is-primary has-background-white"
+          className="navbar-burger button is-inverted is-dark"
           aria-label="menu"
           aria-expanded="false"
           onClick={handleToggleMenu}
@@ -97,7 +97,7 @@ const NavigationBar = () => {
                   value={typedValue}
                   onChange={handleTypeToSearch}
                 />
-                <span className="icon is-small is-left has-text-primary">
+                <span className="icon is-small is-left has-text-dark">
                   <i className="fas fa-search" />
                 </span>
               </div>

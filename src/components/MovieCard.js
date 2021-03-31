@@ -11,16 +11,16 @@ import { Link } from 'react-router-dom';
  */
 const MovieCard = ({ movie }) => {
   return (
-    <Link className="card" to={`/movies/${movie.imdbID}`}>
+    <Link className="card movie-card mb-4" to={`/movies/${movie.imdbID}`}>
       <div className="card-image">
-        <figure className="image">
-          <img src={movie.Poster} alt={movie.Title} />
+        <figure className="image is-2by3">
+          <img className="has-ratio" src={movie.Poster} alt={movie.Title} />
         </figure>
       </div>
       <div className="card-content">
         <div className="content">
-          <h3>{movie.Title}</h3>
-          <p>{movie.Year}</p>
+          <h3>{movie.Title} ({movie.Year})</h3>
+          <span className="movie-card-tag is-size-7">{movie.Type}</span>
         </div>
       </div>
     </Link>

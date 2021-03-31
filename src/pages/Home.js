@@ -18,24 +18,34 @@ const Home = () => {
   // Show error message if any
   if (!!errorMessage) {
     return (
-      <div>
-        {errorMessage}
-      </div>
+      <section className="hero is-large">
+        <div className="hero-body">
+          <div className="container has-text-centered">
+            <div className="title">Oow! :(</div>
+            <div className="subtitle">{errorMessage}</div>
+          </div>
+        </div>
+      </section>
     );
   }
 
   // Show welcome text if movies are not searched yet
   if (Array.isArray(movies) && movies.length === 0) {
     return (
-      <div>
-        Welcome! You can search any movies using search bar above.
-      </div>
+      <section className="hero is-large">
+        <div className="hero-body">
+          <div className="container has-text-centered">
+            <div className="title">Hola! 👋</div>
+            <div className="subtitle">Welcome! You can search any movies using search bar above.</div>
+          </div>
+        </div>
+      </section>
     );
   };
 
   // Show search movie result if there is any
   return (
-    <div>
+    <div className="container mt-6">
       {/* Movie list */}
       <InfiniteScroll
         hasMore={hasMoreMovies}

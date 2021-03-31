@@ -1,0 +1,16 @@
+/* Movie card styles */
+.movie-card {
+  width: 250px;
+}
+
+.movie-card-tag {
+  background-color: #00d1b2;
+  border-radius: 5px;
+  color: white;
+  padding: 4px 8px;
+}
+
+/* Movie detail page styling */
+.movie-detail-image {
+  min-width: 280px;
+}

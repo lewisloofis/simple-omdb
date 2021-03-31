@@ -13,6 +13,7 @@ const { REACT_APP_SOURCE_API, REACT_APP_APIKEY } = process.env;
  * @property {string} Title Movie title
  * @property {string} Year Year the movie is released
  * @property {string} Poster Movie poster URL
+ * @property {string} Type Item type, can be `movie` or `series`
  * @property {string} imdbID Movie ID at IMDB
  */
 

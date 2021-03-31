@@ -45,7 +45,7 @@ const InfiniteScroll = ({
       }, {
         threshold: [0.9],
         trackVisibility: true,
-        delay: 500
+        delay: 500,
       });
 
       // Track if the bottom of list element is visible
@@ -65,13 +65,15 @@ const InfiniteScroll = ({
   }, [bottomVisible, onLoadMore]);
 
   return (
-    <div>
+    <div className="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-evenly">
       {children}
 
       {/* This is invisible HTML element which represent bottom of our list. */}
       {/* We will trigger load more to create Infinite Scrolling experience. */}
       {/* Only rendered if the list has more data, flagged by hasMore props. */}
-      {!!hasMore && <div ref={bottomOfListEl}>Loading...</div>}
+      {!!hasMore && (
+        <div style={{ width: '100%' }} className="has-text-centered" ref={bottomOfListEl}>Loading...</div>
+      )}
     </div>
   );
 };

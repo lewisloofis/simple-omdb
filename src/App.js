@@ -13,6 +13,7 @@ import NavigationBar from './components/NavigationBar';
 // App pages
 import Home from './pages/Home';
 import MovieDetail from './pages/MovieDetail';
+import './App.css';
 
 /**
  * OMDB app
