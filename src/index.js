@@ -4,9 +4,6 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Our styling helper
-import 'purecss';
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

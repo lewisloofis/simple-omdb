@@ -11,10 +11,18 @@ import { Link } from 'react-router-dom';
  */
 const MovieCard = ({ movie }) => {
   return (
-    <Link to={`/movies/${movie.imdbID}`}>
-      <img src={movie.Poster} alt={movie.Title} />
-      <h3>{movie.Title}</h3>
-      <p>{movie.Year}</p>
+    <Link className="card" to={`/movies/${movie.imdbID}`}>
+      <div className="card-image">
+        <figure className="image">
+          <img src={movie.Poster} alt={movie.Title} />
+        </figure>
+      </div>
+      <div className="card-content">
+        <div className="content">
+          <h3>{movie.Title}</h3>
+          <p>{movie.Year}</p>
+        </div>
+      </div>
     </Link>
   );
 };

@@ -12,7 +12,8 @@ Untuk menjalankan aplikasi ini:
 cara installnya, coba cari Google aja, karena di Macbook dan di Windows berbeda
 caranya. Nanti saya pandu
 2. Clone repository ini. Clone itu bisa kalian anggap seperti download.
-3. Buka folder project ini, lalu jalankan command ini:
+3. Buka folder project ini di Visual Studio Code, buka Terminal, lalu jalankan
+   command ini:
 
    ```
    yarn install
@@ -20,7 +21,7 @@ caranya. Nanti saya pandu
 
    Command ini bertujuan untuk menginstall seluruh modul yang diperlukan untuk
    menjalankan aplikasi yang ada di folder ini
-4. Copy file `.env.example`, ubah namanya jadi `.env`
+4. Copy file `.env.example`, ubah namanya jadi `.env.local`
 
 5. Terakhir jalankan command ini untuk memulai:
 

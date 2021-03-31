@@ -26,12 +26,10 @@ function App() {
         <MovieDataProvider>
           <Router>
             <NavigationBar />
-            <div>
-              <Switch>
-                <Route exact path="/movies/:movieId" component={MovieDetail} />
-                <Route exact path="/" component={Home} />
-              </Switch>
-            </div>
+            <Switch>
+              <Route exact path="/movies/:movieId" component={MovieDetail} />
+              <Route exact path="/" component={Home} />
+            </Switch>
           </Router>
         </MovieDataProvider>
       </NavigationBarContextProvider>
