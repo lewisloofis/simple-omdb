@@ -39,12 +39,15 @@ const NavigationBar = () => {
       const moviesAPIResponse = await searchFromOMDB(typedValue, 1);
       if (moviesAPIResponse.Response === 'True') {
         setAutocompleteResult(moviesAPIResponse.Search);
+        setShowAutoComplete(true);
       }
     }, 250);
 
     // If users type more than 2 chars, show autocomplete
     if (typedValue.length > 2) {
       searchAutocompleteResult()
+    } else {
+      setShowAutoComplete(false);
     }
   }, [typedValue]);
 
